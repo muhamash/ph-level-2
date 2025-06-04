@@ -1,10 +1,14 @@
 const http = require( "http" )
 const path = require( "path" )
-const fs = require("fs")
+const fs = require( "fs" )
 
-const filePath = path.join( __dirname, './db/todo.json')
+const filePath = path.join( __dirname, './db/todo.json' )
 
-const server = http.createServer(( req, res )=> {
+
+const server = http.createServer( ( req, res ) =>
+{
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const pathname = url.pathname
     // res.end( "Welcome to the todo server" )
     const data = fs.readFileSync( filePath, "utf-8" )
     const todos = JSON.parse(data);
@@ -57,6 +61,28 @@ const server = http.createServer(( req, res )=> {
                 }));
             }
         });
+    }
+    else if ( req.url.startsWith("/get") && req.method === 'GET' )
+    {
+        res.writeHead( 200, {
+            "Content-Type": "application/json",
+            "email": "test@email"
+        } )
+        // res.setHeader( "Content-Type", "text/plain" )
+        // res.statusCode = 202
+        // const url = new URL( req.url )
+        // console.log( url )
+        const title = url.searchParams.get( "title" )
+        const data = fs.readFileSync( filePath, "utf-8" )
+        const parsedData = JSON.parse( data )
+        const todo = parsedData.find( todo => todo.title === title )
+        
+        if ( !todo )
+        {
+            res.end("todo not found")
+        }
+
+        res.end( JSON.stringify(todo))
     }
     
     else
