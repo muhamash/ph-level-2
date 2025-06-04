@@ -1,17 +1,12 @@
 [
     {
-        "title": "prisma",
-        "body": "Learning prisma",
-        "createdAt": "5/18/2025, 1:25:02 AM"
-    },
-    {
         "title": "typescript",
         "body": "learning node",
         "createdAt": "5/18/2025, 1:25:12 AM"
     },
     {
         "title": "express",
-        "body": "Learning advanced express",
+        "body": "Learning newasd prisma express and gin",
         "createdAt": "5/29/2025, 5:55:16 AM"
     },
     {
@@ -23,20 +18,5 @@
         "title": "new",
         "body": "Learning new prisma",
         "createdAt": "6/5/2025, 12:12:51 AM"
-    },
-    {
-        "title": "new prisma",
-        "body": "Learning new prisma",
-        "createdAt": "6/5/2025, 12:15:03 AM"
-    },
-    {
-        "title": "new prisma oka",
-        "body": "Learning new prisma",
-        "createdAt": "6/5/2025, 12:15:18 AM"
-    },
-    {
-        "title": "new prisma 201",
-        "body": "Learning new prisma",
-        "createdAt": "6/5/2025, 12:15:30 AM"
     }
 ]
