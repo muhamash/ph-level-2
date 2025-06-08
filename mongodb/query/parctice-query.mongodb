@@ -12,8 +12,9 @@ use( "ph-practice" )
     //         age: { $ne: 15 },
     //         age: { $lte: 25 },
     //     }
-    // ] 
+    // ]
 // } ).limit( 5 ).sort( { age: 1 } )
+
 db.users.find(
     {
         $and: [
