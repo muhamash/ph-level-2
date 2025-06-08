@@ -1,4 +1,29 @@
 // mongosh--host 127.0.0.1 --port 27017
 use( "ph-practice" )
 
-db.users.find({})
+// db.users.find({age: {$ne:15}}, {age: 1, name: 1, _id: 0}).limit(10).sort({age:1})
+
+// db.users.find({age: {$ne:15, $lte: 20}}, {age: 1, name: 1, _id: 0}).limit(10).sort({age:-1})
+
+// explicit $and operator
+// db.users.find( {
+    // [
+    //     {
+    //         age: { $ne: 15 },
+    //         age: { $lte: 25 },
+    //     }
+    // ] 
+// } ).limit( 5 ).sort( { age: 1 } )
+db.users.find(
+    {
+        $and: [
+            { age: { $ne: 15 } },
+            { age: { $lte: 25 } }
+        ]
+    },
+    {
+        age: 1,
+        name: 1,
+        _id: 0
+    }
+).sort( { age: -1 } ).limit( 5 );  
