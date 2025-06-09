@@ -1,0 +1,54 @@
+// db.users.find( {}, { _id: 1 } );
+// {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000065"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000066"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000067"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000068"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000069"
+//     }
+//   },
+
+// db.users.updateOne( { _id: ObjectId( "6406ad63fc13ae5a40000067" ) }, {
+//     $addToSet: {
+//         interests: ["tessdst", "oksda"]
+//     }
+// } );
+
+// db.users.updateOne( { _id: ObjectId( "6406ad63fc13ae5a40000069" ) }, {
+//     $addToSet: {
+//         interests: ["sdgdsg", "azsfasf"]
+//     }
+// } );
+
+// db.users.updateOne( { _id: ObjectId( "6406ad63fc13ae5a40000068" ) }, {
+//     $addToSet: {
+//         interests: {$each : ["test", "oka", "fasfasfasf"]}
+//     }
+// } );
+
+// will set duplicate value
+db.users.updateOne( { _id: ObjectId( "6406ad63fc13ae5a40000068" ) }, {
+    $push: {
+        interests: {$each : ["test", "oka", "fasfasfasf"]}
+    }
+} );
+
+db.users.findOne( { _id: ObjectId( "6406ad63fc13ae5a40000068" ) }, { interests: 1 } )
+
