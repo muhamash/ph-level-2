@@ -1,0 +1,13 @@
+// db.users.find( { age: { $exists: true } } );
+// db.users.find( { phone: { $exists: false } } );
+// db.users.find( { unknown: { $exists: false } } );
+// db.users.find( { company: { $exists: true } } );
+
+// db.users.find({}, { age: 1, _id: 0 } );
+
+db.users.find( { salary: { $type: "string" } }, { salary: 1, _id: 0 } );
+db.users.find( { friends: { $type: "array" } }, { friends: 1, _id: 0 } );
+
+db.users.find( { friends: { $size: 5 } }, { friends: 1, _id: 0 } );
+db.users.find( { friends: { $size: 0 } }, { friends: 1, _id: 0 } );
+db.users.find( { company: { $type: "null" } }, {company: 1, _id:0}  );

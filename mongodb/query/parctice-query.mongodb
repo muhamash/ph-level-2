@@ -12,11 +12,13 @@ use( "ph-practice" )
     //         age: { $ne: 15 },
     //         age: { $lte: 25 },
     //     }
-    // ] 
+    // ]
 // } ).limit( 5 ).sort( { age: 1 } )
+
 db.users.find(
     {
         $and: [
+            { gender : "Male"},
             { age: { $ne: 15 } },
             { age: { $lte: 25 } }
         ]
@@ -24,6 +26,65 @@ db.users.find(
     {
         age: 1,
         name: 1,
+        gender: "Male",
         _id: 0
     }
 ).sort( { age: -1 } ).limit( 5 );  
+
+// or explicit
+db.users.find(
+    {
+        $or: [
+            { interests: "Cooking" },
+            { interests: "Gaming" },
+        ]
+    },
+    {
+        age: 1,
+        name: 1,
+        interests: 1,
+        _id: 0
+    }
+).sort( { age: -1 } ).limit( 5 ); 
+
+db.users.find(
+    {
+        $or: [
+            { "skills.name": "JAVASCRIPT" },
+            { "skills.name": "PYTHON" },
+            { "skills.level": "Intermidiate" },
+            { "skills.level": "Expert" },
+            { interests: "Cooking" },
+            { interests: "Gaming" },
+        ],
+    },
+    {
+        // age: 1,
+        // name: 1,
+        interests: 1,
+        skills: 1,
+        _id: 0
+    },
+).sort( { age: -1 } ).limit( 5 ); 
+
+
+db.users.find(
+    {
+        // $or: [
+        //     { "skills.name": "JAVASCRIPT" },
+        //     { "skills.name": "PYTHON" },
+        //     { "skills.level": "Intermidiate" },
+        //     { "skills.level": "Expert" },
+        //     { interests: "Cooking" },
+        //     { interests: "Gaming" },
+        // ],
+        "skills.name": { $nin : ["JAVASCRIPT"]}
+    },
+    {
+        // age: 1,
+        // name: 1,
+        // interests: 1,
+        skills: 1,
+        _id: 0
+    },
+).sort( { age: -1 } ).limit( 5 ); 
