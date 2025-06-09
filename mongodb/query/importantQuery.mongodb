@@ -1,0 +1,34 @@
+db.users.find( { interests: "Cooking" }, { interests: 1 } )
+db.users.find( { "interests.2": "Cooking" }, { interests: 1, _id: 0 } );
+
+db.users.find( { "interests.2": "Cooking" }, { interests: 1, _id: 0 } ).count();
+
+db.users.find( { interests: [
+    "Travelling",
+    "Gaming",
+    "Reading"
+  ] }, { interests: 1, _id: 0 } );
+
+db.users.find({},{interests: 1})
+
+db.users.find( {
+    interests: {
+        $all: [
+            "Travelling",
+            "Gaming",
+            "Reading"
+        ]
+    }
+}, { interests: 1, _id: 0 } );
+
+db.users.find( {
+    skills: {
+        $elemMatch: {
+            "name": "JAVASCRIPT",
+            "level": "Intermidiate"
+        }
+    }
+}, { skills: 1, _id: 0 } );
+
+
+// db.users.find({},{skills: 1})
