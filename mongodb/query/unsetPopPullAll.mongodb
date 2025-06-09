@@ -1,0 +1,41 @@
+// {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000065"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000066"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000067"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000068"
+//     }
+//   },
+//   {
+//     "_id": {
+//       "$oid": "6406ad63fc13ae5a40000069"
+//     }
+//   },
+
+// db.users.updateOne( { _id: ObjectId( '6406ad63fc13ae5a40000069' ) }, { $unset: { birthday: "" } } )
+
+// db.users.updateOne( { _id: ObjectId( '6406ad63fc13ae5a40000066' ) }, { $pop: { friends: 1 } } )
+
+// db.users.updateOne( { _id: ObjectId( '6406ad63fc13ae5a40000066' ) }, { $pull: { friends: "Fahim Ahammed Firoz" } } )
+
+db.users.updateOne( { _id: ObjectId( '6406ad63fc13ae5a40000066' ) }, {
+    $pullAll: {
+        friends: [ "Mir Hussain",
+            "Abdur Rakib",
+            "Najmus Sakib", ]
+    }
+} );
+
+db.users.findOne( { _id: ObjectId( '6406ad63fc13ae5a40000067' ) }, {friends: []} );
