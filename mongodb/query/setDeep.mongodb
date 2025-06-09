@@ -1,0 +1,21 @@
+// db.users.updateOne( { _id: ObjectId( '6406ad63fc13ae5a40000066' ) }, {
+//     $set: {
+//         "address.city": "kabul"
+//     }
+// } )
+
+// positional operator >> array of object
+// db.users.updateOne( { _id: ObjectId( '6406ad63fc13ae5a40000066' ), "education.major": "syria" }, {
+//     $set: {
+//         "education.$.major": "gaza"
+//     }
+// } )
+
+db.users.updateOne( { _id: ObjectId( '6406ad63fc13ae5a40000066' ) } ,{
+    $inc: {
+        age: 1
+    }
+} )
+
+db.users.findOne( { _id: ObjectId( '6406ad63fc13ae5a40000066' ) }, { age: 1 } );
+
