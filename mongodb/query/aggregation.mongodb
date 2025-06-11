@@ -7,7 +7,74 @@
 //         }
 //     } ] );
 
-db.users.aggregate( [ { $match: { gender: "Female", age: { $lt: 10 } } }, {$project: {
-  name: 1, age: 1, gender: 1, _id: 0
-}
-} ] );;
+// db.users.aggregate( [ { $match: { gender: "Female", age: { $lt: 10 } } }, {$project: {
+//   name: 1, age: 1, gender: 1, _id: 0
+// }
+// } ] );
+
+// 16-2 $addFields , $out , $merge aggregation stage
+
+// db.users.aggregate( [ { $match: { gender: "Female", age: { $lt: 10 } } }, {
+//     $project: {
+//         name: 1, age: 1, gender: 1, _id: 0
+//     }
+// } ] );
+
+// db.users.aggregate( [
+//     {
+//         $match: {
+//             gender: "Male"
+//         }
+//     },
+//     // stage 2 -> not modify original document
+//     {
+//         $addFields: {
+//           course: "ph level-2", tech: "MERN"
+//         }
+//     },
+//     {
+//         $project: {
+//             name: 1, _id: 0, course: 1, tech: 1
+//         }
+//     },
+//     // stage 3 -> send into new collection
+//     {
+//         $out: "course-student"
+//     },
+// ] );
+
+// modify original doc
+db.users.aggregate( [
+    // {
+    //     $match: {
+    //         gender: "Male"
+    //     }
+    // },
+    // stage 2 -> not modify original document
+    {
+        $addFields: {
+          course: "ph level-2", tech: "MERN"
+        }
+    },
+    // {
+    //     $project: {
+    //         name: 1, _id: 0, course: 1, tech: 1
+    //     }
+    // },
+    // stage 3 -> send into new collection
+    {
+        $merge: "users"
+    },
+] );
+
+
+// db.getCollection( "course-student" ).find( {} ).limit( 1 );
+db.users.aggregate( [ {
+    $match: {
+        gender: "Male"
+    }
+}, {
+    $project: {
+        name: 1, _id: 0, course: 1, tech: 1
+    }
+}, ] );
