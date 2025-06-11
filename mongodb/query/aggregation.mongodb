@@ -1,0 +1,13 @@
+// db.users.find({})
+
+// db.users.aggregate(
+//     [ {
+//         $match: {
+//             gender: "Male", age: { $lt: 10 }
+//         }
+//     } ] );
+
+db.users.aggregate( [ { $match: { gender: "Female", age: { $lt: 10 } } }, {$project: {
+  name: 1, age: 1, gender: 1, _id: 0
+}
+} ] );;
