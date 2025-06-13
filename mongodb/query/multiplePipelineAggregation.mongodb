@@ -1,0 +1,54 @@
+// 16-7 $facet, multiple pipeline aggregation stage
+
+db.users.aggregate( [
+    {
+        $facet: {
+            // pipeline 1
+            "friendsCount": [
+                // stage 1
+                {
+                    $unwind: "$friends"
+                },
+                // stage 2
+                {
+                    $group: {
+                        _id: "$friends",
+                        count: {
+                            $sum: 1
+                        }
+                    }
+                }
+            ],
+            // pipeline 2
+            "educations": [
+                // stage 1
+                {
+                    $unwind: "$education"
+                },
+                // stage 2
+                {
+                    $group: {
+                        _id: "$education",
+                        count: {
+                            $sum: 1
+                        }
+                    }
+                }
+            ],
+            // pipeline 3
+            "skillsCount": [
+                {
+                    $unwind: "$skills"
+                },
+                {
+                    $group: {
+                      _id: "$skills",
+                      count: {
+                        $sum: 1
+                      }
+                    }
+                }
+            ]
+        }
+    }
+] );
