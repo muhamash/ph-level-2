@@ -1,0 +1,11 @@
+// db.orders.aggregate([])
+// db.users.aggregate([])
+// db.users.find({_id: ObjectId('6406ad63fc13ae5a40000065')}).explain("executionStats")
+// db.users.find({email : "mdangl1@odnoklassniki.ru"})
+// murphycohen@globoil.com
+// db.massive.find( {}, { email: 1 } )
+
+// db.getCollection("massive").createIndex({email: 1})
+
+// 16-10 Explore compound index and text index
+
