@@ -1,0 +1,156 @@
+// db.orders.aggregate([])
+// db.users.aggregate([])
+// db.users.find({_id: ObjectId('6406ad63fc13ae5a40000065')}).explain("executionStats")
+// db.users.find({email : "mdangl1@odnoklassniki.ru"})
+// murphycohen@globoil.com
+// db.massive.find( {}, { email: 1 } )
+
+// db.getCollection("massive").createIndex({email: 1})
+
+// 16-10 Explore compound index and text index
+
+// db.massive.find( {}, { email: 1, gender: 1, age: 1 } )
+// db.getCollection( "massive" ).createIndex( { age: -1, gender: -1, about: "text" } );
+// db.massive.createIndex({ about: "text" });
+// db.massive.dropIndexes();
+
+// db.massive.find(
+//     {
+//         $text: { $search: "dolor" }
+//     },
+//     {
+//         about: 1,
+//         _id: 0 
+//     }
+// );
+
+// db.massive.find(
+//     { $text: { $search: "dolor" } },
+//     { about: 1, score: { $meta: "textScore" } }
+//   ).sort({ score: { $meta: "textScore" } });
+
+// db.massive.aggregate( [
+//     { $match: { isActive: true } },
+//     {
+//         $group: {
+//             _id: "$gender",
+//             count: { $sum: 1 }
+//         }
+//     }
+// ] );
+
+// db.massive.find(
+//     {
+//         isActive: true,
+//         favoriteFruit: "banana"
+//     },
+//     {
+//         name: 1,
+//         email: 1,
+//         _id: 0
+//     }
+// );  
+
+// db.massive.aggregate( [
+//     {
+//         $group: {
+//             _id: "$favoriteFruit",
+//             avgAge: { $avg: "$age" }
+//         }
+//     },
+//     {
+//         $sort: { avgAge: -1 }
+//     }
+// ] );  
+
+// db.collection.aggregate( [
+//     {
+//         $match: {
+//             "friends.0": { $exists: true }
+//         }
+//     },
+//     {
+//         $unwind: "$friends"
+//     },
+//     {
+//         $match: {
+//             "friends.name": { $regex: /^W/ }
+//         }
+//     },
+//     {
+//         $group: {
+//             _id: null,
+//             uniqueFriends: { $addToSet: "$friends.name" }
+//         }
+//     }
+// ] );  
+
+// db.massive.aggregate( [
+//     {
+//         $match: {
+//             "friends.0": { $exists: true }
+//         }
+//     },
+//     {
+//         $unwind: "$friends"
+//     },
+//     {
+//         $match: {
+//             "friends.name": { $regex: /^W/, $options: "i" } // case-insensitive optional
+//         }
+//     },
+//     {
+//         $group: {
+//             _id: null,
+//             uniqueFriends: { $addToSet: "$friends.name" }
+//         }
+//     }
+// ] );  
+
+// db.massive.aggregate( [
+//     {
+//         $facet: {
+//             below30: [
+//                 { $match: { age: { $lt: 30 } } },
+//                 {
+//                     $bucket: {
+//                         groupBy: "$age",
+//                         boundaries: [ 20, 25, 30 ],
+//                         default: "Other",
+//                         output: {
+//                             people: { $push: { name: "$name", age: "$age" } }
+//                         }
+//                     }
+//                 }
+//             ],
+//             above30: [
+//                 { $match: { age: { $gt: 30 } } },
+//                 {
+//                     $bucket: {
+//                         groupBy: "$age",
+//                         boundaries: [ 31, 40, 50, 60 ],
+//                         default: "Other",
+//                         output: {
+//                             people: { $push: { name: "$name", age: "$age" } }
+//                         }
+//                     }
+//                 }
+//             ]
+//         }
+//     }
+// ] );  
+
+db.massive.aggregate( [
+    {
+        $group: {
+            _id: "$company",
+            totalBalance: { $sum: { $toDouble: { $substr: [ "$balance", 1, -1 ] } } },
+        },
+    },
+    {
+        $sort: { totalBalance: -1 },
+    },
+    // {
+    //     $limit: 2,
+    // },
+] );
