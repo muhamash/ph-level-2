@@ -1,5 +1,6 @@
 import { Model } from "mongoose"
 
+
 export interface IAddress {
     city: string,
     street: string,

@@ -8,8 +8,9 @@ notesRoutes.post( '/create-note', async ( req: Request, res: Response ) =>
 {
 
     const body = req.body
-    const note = await Note.create( body )
-    console.log( body )
+    console.log(body)
+    const note = await (await Note.create( body )).populate("userId")
+    console.log( note );
 
     res.status( 201 ).json( {
         success: true,
