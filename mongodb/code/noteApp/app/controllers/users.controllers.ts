@@ -1,13 +1,27 @@
 import express, { Request, Response } from "express";
 import { ObjectId } from 'mongodb';
+import { z } from "zod";
 import { user } from "../models/users.models";
 
-export const usersRoutes = express.Router()
+export const usersRoutes = express.Router();
+
+const CreateUserZodSchema = z.object(
+    {
+        firstName: z.string(),
+        lastName: z.string(),
+        age: z.number(),
+        email: z.string(),
+        password: z.string(),
+        role: z.string().optional()
+    }
+);
 
 usersRoutes.post( '/create-user', async ( req: Request, res: Response ) =>
 {
 
-    const body = req.body
+    // const body = req.body
+    const body = await CreateUserZodSchema.parseAsync( req.body );
+
     const user = await user.create( body )
     console.log( body )
 
