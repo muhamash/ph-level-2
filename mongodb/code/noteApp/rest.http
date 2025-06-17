@@ -2,8 +2,8 @@
 # Content-Type: application/json
 
 # {
-#     "title": "test title",
-#     "content": "text content",
+#     "title": "test titssdslesds",
+#     "content": "text contentsds",
 #     "category": "study",
 #     "pinned": true,
 #     "tags": {
@@ -11,10 +11,26 @@
 #     }
 # }
 
+# 68513a19fc0bd8c89e200363
+# 68513a16fc0bd8c89e200361
 # 685133db21913748ff9ff671
+# 685139eafc0bd8c89e20035f
 
 # GET http://localhost:5000/notes
 # Content-Type: application/json
 
-GET http://localhost:5000/notes/685133db21913748ff9ff671
+# DELETE http://localhost:5000/notes/685139eafc0bd8c89e20035f
+# Content-Type: application/json
+
+PATCH  http://localhost:5000/notes/68513a19fc0bd8c89e200363
 Content-Type: application/json
+
+{
+    "title": "tescst edited",
+    "content": "text contscentsds edited",
+    "category": "study",
+    "pinned": true,
+    "tags": {
+        "label": "mongoose typescript"
+    }
+}
