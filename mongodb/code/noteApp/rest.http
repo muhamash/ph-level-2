@@ -11,5 +11,10 @@
 #     }
 # }
 
-GET http://localhost:5000/notes
+# 685133db21913748ff9ff671
+
+# GET http://localhost:5000/notes
+# Content-Type: application/json
+
+GET http://localhost:5000/notes/685133db21913748ff9ff671
 Content-Type: application/json

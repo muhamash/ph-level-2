@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { ObjectId } from 'mongodb';
 import { Note } from "../models/notes.models";
 
 export const notesRoutes = express.Router()
@@ -29,4 +30,18 @@ notesRoutes.get( "/", async ( req: Request, res: Response ) =>
         message: "Database operation oka!",
         notes
     })
+} );
+
+notesRoutes.get( "/:id", async ( req: Request, res: Response ) =>
+{
+    const id = req.params.id;
+    // const note = await Note.findById(id)
+    const note = await Note.find( { _id: new ObjectId( id ) }, { tags: 1, title: 1 } );
+    console.log( note, id )
+    
+    res.status( 200 ).json( {
+        success: true,
+        message: "Note found!",
+        note
+    } )
 } );
