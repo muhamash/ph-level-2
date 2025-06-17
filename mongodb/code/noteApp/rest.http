@@ -1,0 +1,15 @@
+# POST http://localhost:5000/notes/create-note
+# Content-Type: application/json
+
+# {
+#     "title": "test title",
+#     "content": "text content",
+#     "category": "study",
+#     "pinned": true,
+#     "tags": {
+#         "label": "mongoose typescript"
+#     }
+# }
+
+GET http://localhost:5000/notes
+Content-Type: application/json
