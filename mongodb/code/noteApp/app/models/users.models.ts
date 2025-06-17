@@ -5,7 +5,7 @@ import { IUser } from "../interfaces/user.interface";
 const userSchema = new Schema<IUser>({
     firstName: {
         type: String,
-        required: true,
+        required: [true, "Must require the first name"],
         trim: true
 
     },
@@ -17,11 +17,13 @@ const userSchema = new Schema<IUser>({
     email: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        min: [18, "Age should not below than {VALUE}"]
     },
     password: {
         type: String,
-        required: true,
+        required: [ true, "Password is required" ],
+        min: [8, "Password should longer than 7 character"]
     },
     role: {
         type: String,

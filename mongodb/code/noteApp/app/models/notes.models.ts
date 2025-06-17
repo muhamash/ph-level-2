@@ -3,7 +3,7 @@ import { INotes } from "../interfaces/note.interface"
 
 const noteSchema = new Schema<INotes>(
     {
-        title: { type: String, required: true, trim: true },
+        title: { type: String, required: true, trim: true , max:[20, "Title -> {VALUE} should not longer than 20 character"]},
         content: { type: String, default: '' },
         category: {
             type: String,
