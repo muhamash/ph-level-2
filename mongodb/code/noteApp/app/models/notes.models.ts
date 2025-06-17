@@ -3,11 +3,11 @@ import { INotes } from "../interfaces/note.interface"
 
 const noteSchema = new Schema<INotes>(
     {
-        title: { type: String, required: true, trim: true , max:[20, "Title -> {VALUE} should not longer than 20 character"]},
+        title: { type: String, required: true, trim: true, max: [ 20, "Title -> {VALUE} should not longer than 20 character" ] },
         content: { type: String, default: '' },
         category: {
             type: String,
-            enum: ["personal", "work", "study", "other"],
+            enum: [ "personal", "work", "study", "other" ],
             default: "personal"
         },
         pinned: {
@@ -21,8 +21,8 @@ const noteSchema = new Schema<INotes>(
     }, {
     versionKey: false,
     timestamps: true,
-}
-
-)
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+} );
 
 export const Note = model<INotes>("Note", noteSchema)
