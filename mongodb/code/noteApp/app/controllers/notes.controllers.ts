@@ -23,7 +23,6 @@ notesRoutes.get( "/", async ( req: Request, res: Response ) =>
     // const notes = await Note.find().countDocuments();
     // const notes = await Note.find( {}, { title: 1, content: 1 } );
     const notes = await Note.find();
-    console.log(notes)
 
     res.status( 200 ).json( {
         success: true,
@@ -45,3 +44,31 @@ notesRoutes.get( "/:id", async ( req: Request, res: Response ) =>
         note
     } )
 } );
+
+notesRoutes.delete('/:noteId', async (req: Request, res: Response) => {
+    const noteId = req.params.noteId
+    const note = await Note.findByIdAndDelete(noteId)
+    // const note1 = await Note.findOneAndDelete({ _id: noteId })
+    // const note2 = await Note.deleteOne({ _id: noteId })
+
+    res.status(201).json({
+        success: true,
+        message: "Note updated successfully",
+        note,
+        noteId
+    })
+})
+notesRoutes.patch('/:noteId', async (req: Request, res: Response) => {
+    const noteId = req.params.noteId
+    const updatedBody = req.body;
+    const note = await Note.findByIdAndUpdate(noteId, updatedBody, { new: true, })
+    // const note = await Note.findOneAndUpdate({ _id: noteId }, updatedBody, { new: true, })
+    // const note = await Note.updateOne({ _id: noteId }, updatedBody, { new: true, })
+    console.log(note)
+
+    res.status(201).json({
+        success: true,
+        message: "Note updated successfully",
+        note
+    })
+})
