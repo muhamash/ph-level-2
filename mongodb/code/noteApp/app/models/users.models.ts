@@ -1,8 +1,15 @@
-import { model, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
-import { IUser } from "../interfaces/user.interface";
+import { model, Schema } from "mongoose";
 import validator from "validator";
+import { IAddress, IUser } from "../interfaces/user.interface";
 
+const addressSchema = new Schema<IAddress>( {
+    city: { type: String },
+    street: { type: String },
+    zip: { type: Number }
+}, {
+    _id: false
+} );
 
 const userSchema = new Schema<IUser>( {
     firstName: {
@@ -39,12 +46,16 @@ const userSchema = new Schema<IUser>( {
     },
     role: {
         type: String,
+        // uppercase,
         // enum: ['user', 'admin'],
         enum: {
             values: [ 'user', 'admin' ],
             message: "Role is not valid rather it got {VALUE}"
-        }
+        },
         default: 'user'
+    },
+    address: {
+        type: addressSchema
     }
 }, {
     versionKey: false,

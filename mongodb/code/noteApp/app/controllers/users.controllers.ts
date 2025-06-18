@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { ObjectId } from 'mongodb';
 import { z } from "zod";
-import { user } from "../models/users.models";
+import { User } from "../models/users.models";
 
 export const usersRoutes = express.Router();
 
@@ -9,10 +9,11 @@ const CreateUserZodSchema = z.object(
     {
         firstName: z.string(),
         lastName: z.string(),
-        age: z.number(),
+        // age: z.number(),
         email: z.string(),
         password: z.string(),
-        role: z.string().optional()
+        role: z.string().optional(),
+        address: z.object().optional()
     }
 );
 
@@ -20,23 +21,33 @@ usersRoutes.post( '/create-user', async ( req: Request, res: Response ) =>
 {
 
     // const body = req.body
-    const body = await CreateUserZodSchema.parseAsync( req.body );
+    try
+    {
+        const body = await CreateUserZodSchema.parseAsync( req.body );
+        console.log( body )
 
-    const user = await user.create( body )
-    console.log( body )
+        const user = await User.create( body )
 
-    res.status( 201 ).json( {
-        success: true,
-        message: "user created successfully",
-        user
-    } );
+        res.status( 201 ).json( {
+            success: true,
+            message: "user created successfully",
+            user
+        } );
+    }
+    catch ( error )
+    {
+        console.log(error)
+        res.status( 400 ).json( {
+            message: error?.message || error
+        } )
+    }
 } );
 
 usersRoutes.get( "/", async ( req: Request, res: Response ) =>
 {
     // const users = await user.find().countDocuments();
     // const users = await user.find( {}, { title: 1, content: 1 } );
-    const users = await user.find();
+    const users = await User.find();
 
     res.status( 200 ).json( {
         success: true,
@@ -49,7 +60,7 @@ usersRoutes.get( "/:id", async ( req: Request, res: Response ) =>
 {
     const id = req.params.id;
     // const user = await user.findById(id)
-    const user = await user.find( { _id: new ObjectId( id ) }, { tags: 1, title: 1 } );
+    const user = await User.find( { _id: new ObjectId( id ) }, { tags: 1, title: 1 } );
     console.log( user, id )
     
     res.status( 200 ).json( {
@@ -75,7 +86,7 @@ usersRoutes.delete('/:userId', async (req: Request, res: Response) => {
 usersRoutes.patch('/:userId', async (req: Request, res: Response) => {
     const userId = req.params.userId
     const updatedBody = req.body;
-    const user = await user.findByIdAndUpdate(userId, updatedBody, { new: true, })
+    const user = await User.findByIdAndUpdate(userId, updatedBody, { new: true, })
     // const user = await user.findOneAndUpdate({ _id: userId }, updatedBody, { new: true, })
     // const user = await user.updateOne({ _id: userId }, updatedBody, { new: true, })
     console.log(user)
