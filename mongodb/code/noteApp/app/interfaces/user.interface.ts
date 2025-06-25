@@ -13,7 +13,8 @@ export interface IUser {
     email: string,
     password: string,
     role: 'USER' | 'ADMIN' | 'SUPERADMIN',
-    address: IAddress
+    address: IAddress,
+    // notes: any[]
 }
 
 export interface UserInstanceMethods {

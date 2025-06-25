@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
-import { model, Schema } from "mongoose";
+import { Model, model, Schema } from "mongoose";
 import validator from "validator";
-import { IAddress, IUser } from "../interfaces/user.interface";
+import { IAddress, IUser, UserInstanceMethods } from "../interfaces/user.interface";
 
 const addressSchema = new Schema<IAddress>( {
     city: { type: String },
@@ -11,7 +11,7 @@ const addressSchema = new Schema<IAddress>( {
     _id: false
 } );
 
-const userSchema = new Schema<IUser>( {
+const userSchema = new Schema<IUser, Model<IUser>, UserInstanceMethods>( {
     firstName: {
         type: String,
         required: [ true, "Must require the first name" ],
@@ -56,7 +56,11 @@ const userSchema = new Schema<IUser>( {
     },
     address: {
         type: addressSchema
-    }
+    },
+    // notes: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Note"
+    // }]
 }, {
     versionKey: false,
     timestamps: true,
@@ -64,10 +68,14 @@ const userSchema = new Schema<IUser>( {
     toObject: { virtuals: true }
 } );
 
-userSchema.method("hashPassword", async function (plainPassword: string) {
-    const password = await bcrypt.hash(plainPassword, 10)
+// Instance Methods
+userSchema.method( "hashPassword", async function ( plainPassword: string )
+{
+    const password = await bcrypt.hash( plainPassword, 10 )
     return password
-})
+} );
+
+// Static Methods
 userSchema.static("hashPassword", async function (plainPassword: string) {
     const password = await bcrypt.hash(plainPassword, 10)
     return password
@@ -101,8 +109,8 @@ userSchema.post('save', function (doc, next) {
 //Query Middlware 
 userSchema.post("findOneAndDelete", async function (doc, next) {
     if (doc) {
-        console.log(doc);
-        await Note.deleteMany({ user: doc._id })
+        console.log("Query Middleware: User deleted", doc);
+        await Note.deleteMany({ userId: doc._id })
     }
 
     next()
@@ -110,7 +118,42 @@ userSchema.post("findOneAndDelete", async function (doc, next) {
 
 userSchema.virtual('fullName').get(function () {
     return `${this.firstName} ${this.lastName}`
-})
+} )
 
+userSchema.virtual( 'addressInfo' ).get( function ()
+{
+    return `${ this.address?.city }, ${ this.address?.street }`
+} );
+
+userSchema.virtual( 'notes', {
+    ref: "Note",
+    localField: "_id",
+    foreignField: "userId",
+    justOne: false
+} );
+
+userSchema.virtual( 'notesCount', {
+    ref: "Note",
+    localField: "_id",
+    foreignField: "userId",
+    count: true
+} );
+
+userSchema.virtual( 'notesWithTags', {
+    ref: "Note",
+    localField: "_id",
+    foreignField: "userId",
+    match: { tags: { $exists: true, $ne: [] } },
+    options: { sort: { createdAt: -1 } }
+} );
+
+userSchema.virtual( 'testVirtual' ).set( function ( value )
+{
+    console.log( "Setting value to testVirtual", value );
+} ).get( function (value)
+{
+    console.log( "Getting value from testVirtual" );
+    return `This is a test virtual value`;
+} );
 
 export const User = model("User", userSchema)
