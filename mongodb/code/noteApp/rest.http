@@ -1,23 +1,23 @@
-POST http://localhost:5000/notes/create-note
-Content-Type: application/json
+# POST http://localhost:5000/notes/create-note
+# Content-Type: application/json
 
-{
-    "title": "test titssdslesds",
-    "content": "text contentsds",
-    "category": "study",
-    "pinned": true,
-    "tags": {
-        "label": "mongoose typescript"
-    },
-    "userId": "68519dc9cea61e9c9aed4542"
-}
+# {
+#     "title": "test titssdslesds",
+#     "content": "text contentsds",
+#     "category": "study",
+#     "pinned": true,
+#     "tags": {
+#         "label": "mongoose typescript"
+#     },
+#     "userId": "6852db04ba65962a70a49d45"
+# }
 
 # 68513a19fc0bd8c89e200363
 # 68513a16fc0bd8c89e200361
 # 685133db21913748ff9ff671
 # 685139eafc0bd8c89e20035f
 
-# GET http://localhost:5000/notes
+# GET http://localhost:5000/notes/6852dc86273c4e992cde10a1
 # Content-Type: application/json
 
 # DELETE http://localhost:5000/notes/685139eafc0bd8c89e20035f
@@ -42,8 +42,21 @@ Content-Type: application/json
 # {
 #     "firstName": "test",
 #     "lastName": "textcontentsds",
-#     "email": "study@user.com",
-#     "password": "sdsdsdsadsa"
+#     "email": "study@susxssser.com",
+#     "password": "sdsdsdsadsa",
+#     "address": {
+#         "city": "Anytown",
+#         "street": "123 Main St",
+#         "zipCode": 1234323
+#     }
 # }
 
-# 68519dc9cea61e9c9aed4542
+# 6852dae3ba65962a70a49d41
+# 6852db04ba65962a70a49d45
+# 6852db0cba65962a70a49d47
+
+# GET http://localhost:5000/users/6852db04ba65962a70a49d45
+# Content-Type: application/json
+
+GET http://localhost:5000/users/all
+Content-Type: application/json
