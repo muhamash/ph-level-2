@@ -1,9 +1,10 @@
+import { Button } from "./components/ui/button"
 
 function App() {
 
   return (
-    <div className="bg-red-600">
-      hello
+    <div className="flex min-h-svh flex-col items-center justify-center">
+      <Button className="cursor-pointer" variant={"outline"}>Test button</Button>
     </div>
   )
 }
