@@ -24,7 +24,11 @@ import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 
 export function AddTaskModal() {
-    const form = useForm();
+    const form = useForm({
+        defaultValues: {
+            title: "", 
+        },
+    });
 
     const onSubmit = (data) => {
         console.log(data);
@@ -43,11 +47,11 @@ export function AddTaskModal() {
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit( onSubmit )} className="space-y-4">
                         <FormField
                             control={form.control}
                             name="title"
-                            render={({ field }) => (
+                            render={( { field } ) => (
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
                                     <FormControl>
@@ -62,7 +66,9 @@ export function AddTaskModal() {
                             <DialogClose asChild>
                                 <Button variant="outline" type="button">Cancel</Button>
                             </DialogClose>
-                            <Button type="submit">Save changes</Button>
+                            <DialogClose asChild>
+                                <Button type="submit">Save changes</Button>
+                            </DialogClose>
                         </DialogFooter>
                     </form>
                 </Form>
