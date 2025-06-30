@@ -1,8 +1,9 @@
 import type { RootState } from "@/redux/store";
 import { createSlice } from "@reduxjs/toolkit";
 
-interface ITask
+export interface ITask
 {
+    id: string;
     title: string;
     description: string;
     dueDate: string;
@@ -19,11 +20,28 @@ interface InitialState
 const initialState: InitialState = {
     tasks: [
         {
-            title: "test",
-            description: "this is a description",
+            id: "asdf",
+            title: "testcscs",
+            description: "this is a description dfsdsdsfsd",
             dueDate: "20-10-2025",
             isCompleted: true,
             priority: "HIGH"
+        },
+        {
+             id: "asdfs",
+            title: "test oka",
+            description: "this is a descriptiodssd",
+            dueDate: "20-10-2025",
+            isCompleted: true,
+            priority: "MEDIUM"
+        },
+        {
+             id: "asdfasas",
+            title: "test",
+            description: "this dfvds is a descripdsfdtion",
+            dueDate: "20-10-2025",
+            isCompleted: false,
+            priority: "LOW"
         }
     ],
     filter: "all"
