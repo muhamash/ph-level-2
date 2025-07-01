@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import
     {
         Dialog,
@@ -11,7 +10,7 @@ import
         DialogHeader,
         DialogTitle,
         DialogTrigger,
-    } from "@/components/ui/dialog"
+    } from "@/components/ui/dialog";
 import
     {
         Form,
@@ -21,9 +20,9 @@ import
         FormItem,
         FormLabel,
         FormMessage,
-    } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+    } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import
     {
         Select,
@@ -31,26 +30,57 @@ import
         SelectItem,
         SelectTrigger,
         SelectValue
-    } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { useForm } from "react-hook-form"
+    } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useAppDispatch } from "@/hooks/useRedux";
+import { cn } from "@/lib/utils";
+import { addTask } from "@/redux/features/task/taskSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-export function AddTaskModal() {
-    const form = useForm({
-      defaultValues: {
-        title: "",
-        description: "",
-        dueDate: null,
-        priority: "",
-        isComplete: false,
-      },
-    });
+export function AddTaskModal ()
+{
+    const closeRef = useRef(null);
+
+    const formSchema = z.object( {
+        title: z.string().min( 1, "Title is required" ),
+        description: z.string().min( 1, "Description is required" ),
+        dueDate: z.date( { required_error: "Due date is required" } ),
+        priority: z.string().min( 1, "Priority is required" ),
+        isComplete: z.boolean().optional(),
+    } );
+
+    const form = useForm( {
+        resolver: zodResolver( formSchema ),
+        defaultValues: {
+            title: "",
+            description: "",
+            dueDate: null,
+            priority: "",
+            // isComplete: false,
+        },
+    } );
+
+    const dispatch = useAppDispatch()
   
-    const onSubmit = (data) => {
-      console.log(data);
+    const onSubmit = ( data ) =>
+    {
+        // console.log( data );
+        // form.reset()
+        const payload = {
+            ...data,
+            dueDate: data.dueDate ? data.dueDate.toISOString() : null,
+        };
+        
+        dispatch( addTask( payload ) );
+        form.reset();
+
+        console.log( closeRef )
+        closeRef.current?.click();
     };
   
     return (
@@ -71,6 +101,7 @@ export function AddTaskModal() {
                         <FormField
                             control={form.control}
                             name="title"
+                            // rules={{ required: "This field is required" }}
                             render={( { field } ) => (
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
@@ -87,6 +118,7 @@ export function AddTaskModal() {
                         <FormField
                             control={form.control}
                             name="description"
+                            // rules={{ required: "This field is required" }}
                             render={( { field } ) => (
                                 <FormItem>
                                     <FormLabel>Description</FormLabel>
@@ -103,6 +135,7 @@ export function AddTaskModal() {
                         <FormField
                             control={form.control}
                             name="dueDate"
+                            // rules={{ required: "This field is required" }}
                             render={( { field } ) => (
                                 <FormItem className="flex flex-col">
                                     <FormLabel>Due date of the task</FormLabel>
@@ -141,6 +174,7 @@ export function AddTaskModal() {
                             <FormField
                                 control={form.control}
                                 name="priority"
+                                // rules={{ required: "This field is required" }}
                                 render={( { field } ) => (
                                     <FormItem>
                                         <FormLabel>Priority</FormLabel>
@@ -163,9 +197,10 @@ export function AddTaskModal() {
                             />
   
                             {/* isComplete */}
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="isComplete"
+                                // rules={{ required: "This field is required" }}
                                 render={( { field } ) => (
                                     <FormItem className="flex flex-row items-center gap-2">
                                         <FormControl>
@@ -183,7 +218,7 @@ export function AddTaskModal() {
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
                         </div>
   
                         <DialogFooter>
@@ -192,9 +227,7 @@ export function AddTaskModal() {
                                     Cancel
                                 </Button>
                             </DialogClose>
-                            <DialogClose asChild>
-                                <Button type="submit">Save changes</Button>
-                            </DialogClose>
+                            <Button ref={closeRef} type="submit">Save changes</Button>
                         </DialogFooter>
                     </form>
                 </Form>
