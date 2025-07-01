@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Checkbox } from "@/components/ui/checkbox"
 import
     {
         Dialog,
@@ -21,19 +23,36 @@ import
         FormMessage,
     } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import
+    {
+        Select,
+        SelectContent,
+        SelectItem,
+        SelectTrigger,
+        SelectValue
+    } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 
 export function AddTaskModal() {
     const form = useForm({
-        defaultValues: {
-            title: "", 
-        },
+      defaultValues: {
+        title: "",
+        description: "",
+        dueDate: null,
+        priority: "",
+        isComplete: false,
+      },
     });
-
+  
     const onSubmit = (data) => {
-        console.log(data);
+      console.log(data);
     };
-
+  
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -48,6 +67,7 @@ export function AddTaskModal() {
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit( onSubmit )} className="space-y-4">
+                        {/* Title */}
                         <FormField
                             control={form.control}
                             name="title"
@@ -62,9 +82,115 @@ export function AddTaskModal() {
                                 </FormItem>
                             )}
                         />
+  
+                        {/* Description */}
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={( { field } ) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Task description" {...field} />
+                                    </FormControl>
+                                    <FormDescription>This is the task description</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+  
+                        {/* Due date */}
+                        <FormField
+                            control={form.control}
+                            name="dueDate"
+                            render={( { field } ) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel>Due date of the task</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn(
+                                                        "pl-3 text-left font-normal",
+                                                        !field.value && "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {field.value ? format( field.value, "PPP" ) : "Pick a date"}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                captionLayout="dropdown"
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormDescription>Your task due date.</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+  
+                        <div className="flex justify-between">
+                            {/* Priority */}
+                            <FormField
+                                control={form.control}
+                                name="priority"
+                                render={( { field } ) => (
+                                    <FormItem>
+                                        <FormLabel>Priority</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select priority" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="LOW">Low</SelectItem>
+                                                <SelectItem value="MEDIUM">Medium</SelectItem>
+                                                <SelectItem value="HIGH">High</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormDescription>Select priority</FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+  
+                            {/* isComplete */}
+                            <FormField
+                                control={form.control}
+                                name="isComplete"
+                                render={( { field } ) => (
+                                    <FormItem className="flex flex-row items-center gap-2">
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <div>
+                                            <FormLabel className="text-sm font-normal">isComplete</FormLabel>
+                                            <FormDescription>
+                                                Mark as complete if finished.
+                                            </FormDescription>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+  
                         <DialogFooter>
                             <DialogClose asChild>
-                                <Button variant="outline" type="button">Cancel</Button>
+                                <Button variant="outline" type="button">
+                                    Cancel
+                                </Button>
                             </DialogClose>
                             <DialogClose asChild>
                                 <Button type="submit">Save changes</Button>
@@ -75,4 +201,4 @@ export function AddTaskModal() {
             </DialogContent>
         </Dialog>
     );
-}
+  }

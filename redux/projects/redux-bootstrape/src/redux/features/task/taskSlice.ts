@@ -28,7 +28,7 @@ const initialState: InitialState = {
             priority: "HIGH"
         },
         {
-             id: "asdfs",
+            id: "asdfs",
             title: "test oka",
             description: "this is a descriptiodssd",
             dueDate: "20-10-2025",
@@ -36,7 +36,7 @@ const initialState: InitialState = {
             priority: "MEDIUM"
         },
         {
-             id: "asdfasas",
+            id: "asdfasas",
             title: "test",
             description: "this dfvds is a descripdsfdtion",
             dueDate: "20-10-2025",
