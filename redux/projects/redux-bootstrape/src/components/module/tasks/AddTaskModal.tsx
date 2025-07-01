@@ -34,17 +34,22 @@ import
 import { Textarea } from "@/components/ui/textarea";
 import { useAppDispatch } from "@/hooks/useRedux";
 import { cn } from "@/lib/utils";
-import { addTask } from "@/redux/features/task/taskSlice";
+import { addTask, updateSIngleTask, type ITask } from "@/redux/features/task/taskSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { useRef } from "react";
+import { CalendarIcon, Edit2Icon } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export function AddTaskModal ()
+interface TaskModalProps {
+    mode?: "add" | "edit";
+    task?: ITask;
+}
+  
+export function AddTaskModal ({ mode, task }: TaskModalProps)
 {
-    const closeRef = useRef(null);
+    const [open, setOpen] = useState(false)
 
     const formSchema = z.object( {
         title: z.string().min( 1, "Title is required" ),
@@ -57,11 +62,10 @@ export function AddTaskModal ()
     const form = useForm( {
         resolver: zodResolver( formSchema ),
         defaultValues: {
-            title: "",
-            description: "",
-            dueDate: null,
-            priority: "",
-            // isComplete: false,
+            title: task?.title ?? "",
+            description: task?.description ?? "",
+            priority: task?.priority ?? "low",
+            dueDate: task ? new Date( task.dueDate ) : undefined,
         },
     } );
 
@@ -76,17 +80,34 @@ export function AddTaskModal ()
             dueDate: data.dueDate ? data.dueDate.toISOString() : null,
         };
         
-        dispatch( addTask( payload ) );
-        form.reset();
+        if ( mode === 'add' )
+        {
+            dispatch( addTask( payload ) );
+        }
+        else if ( mode === "edit" )
+        {
+            const payload = {
+                ...data,
+                id: task.id,
+                dueDate: data.dueDate ? data.dueDate.toISOString() : null,
+            };
 
-        console.log( closeRef )
-        closeRef.current?.click();
+            dispatch( updateSIngleTask( payload ) );
+        }
+        else
+        {
+            throw Error("from on submit")
+        }
+
+        form.reset();
+        setOpen(false)
+
     };
   
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary">Add Task</Button>
+                <Button variant="secondary">{mode === "add" ? "Add Task" : <Edit2Icon />}</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -227,7 +248,7 @@ export function AddTaskModal ()
                                     Cancel
                                 </Button>
                             </DialogClose>
-                            <Button ref={closeRef} type="submit">Save changes</Button>
+                            <Button type="submit">Save changes</Button>
                         </DialogFooter>
                     </form>
                 </Form>

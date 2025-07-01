@@ -3,7 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useAppDispatch } from "@/hooks/useRedux";
 import { cn } from "@/lib/utils";
 import { deleteTask, toggleTaskComplete, type ITask } from "@/redux/features/task/taskSlice";
-import { Edit2Icon, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
+import { AddTaskModal } from "./AddTaskModal";
 
 interface TaskProps
 {
@@ -41,13 +42,7 @@ export default function TaskCard ( { task }: TaskProps )
                         variant={"link"} className="p-0 text-violet-500 cursor-pointer">
                         <Trash />
                     </Button>
-                    <Button onClick={() =>
-                    {
-                        dispatch(deleteTask(task.id))
-                    }}
-                        variant={"link"} className="p-0 text-yellow-500 cursor-pointer">
-                        <Edit2Icon />
-                    </Button>
+                    <AddTaskModal mode="edit" task={task}/>
                     <Checkbox checked={task.isCompleted} onClick={() =>
                     {
                         // console.log(task.id)

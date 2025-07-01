@@ -1,7 +1,5 @@
 import type { RootState } from "@/redux/store";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { createSelector } from '@reduxjs/toolkit';
-import type { RootState } from '@/redux/store';
+import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export interface ITask
 {
@@ -20,32 +18,7 @@ interface InitialState
 }
 
 const initialState: InitialState = {
-    tasks: [
-        {
-            id: "asdf",
-            title: "testcscs",
-            description: "this is a description dfsdsdsfsd",
-            dueDate: "20-10-2025",
-            isCompleted: false,
-            priority: "HIGH"
-        },
-        {
-            id: "asdfs",
-            title: "test oka",
-            description: "this is a descriptiodssd",
-            dueDate: "20-10-2025",
-            isCompleted: true,
-            priority: "MEDIUM"
-        },
-        {
-            id: "asdfasas",
-            title: "test",
-            description: "this dfvds is a descripdsfdtion",
-            dueDate: "20-10-2025",
-            isCompleted: false,
-            priority: "LOW"
-        }
-    ],
+    tasks: [],
     filter: "all"
 };
 
@@ -60,6 +33,16 @@ const createTask = ( taskData: DraftTask ): ITask =>
         ...taskData
     }
 }
+
+const updateTask = ( tasks: ITask[], taskData: ITask ) =>
+{
+    const index = tasks.findIndex( ( task ) => task.id === taskData.id );
+    console.log(index, tasks, taskData)
+    if ( index !== -1 )
+    {
+        tasks[ index ] = { ...tasks[ index ], ...taskData };
+    }
+};  
 
 const taskSlice = createSlice( {
     name: "task",
@@ -76,6 +59,7 @@ const taskSlice = createSlice( {
             // console.log(action.payload)
             state.tasks.forEach(task => task.id === action.payload ? (task.isCompleted = !task.isCompleted) : task)
         },
+        
         deleteTask: ( state, action: PayloadAction<string> ) =>
         {
             state.tasks = state.tasks.filter( task => task.id !== action.payload )
@@ -83,8 +67,12 @@ const taskSlice = createSlice( {
         },
         updateFilter: ( state, action: PayloadAction<"low" | "medium" | "high" | "all"> ) =>
         {
-            console.log(action.payload)
+            // console.log(action.payload)
             state.filter = action.payload
+        },
+        updateSIngleTask: ( state, action: PayloadAction<ITask> ) =>
+        {
+            updateTask(state.tasks, action.payload)
         }
     }
 } );
@@ -114,6 +102,6 @@ export const selectTasks = createSelector(
 
 // export const select
 
-export const { addTask, toggleTaskComplete, deleteTask, updateFilter } = taskSlice.actions;
+export const { addTask, toggleTaskComplete, deleteTask, updateFilter, updateSIngleTask } = taskSlice.actions;
 
 export default taskSlice.reducer;

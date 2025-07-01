@@ -9,21 +9,21 @@ export default function Task ()
   const tasks = useAppSelector( selectTasks )
   const dispatch = useAppDispatch();
   const filter = useAppSelector((state) => state.todo.filter); 
-  // console.log( tasks, filter )
+  console.log( tasks, filter )
   
   return (
     <div className="mx-auto max-w-7xl px-5 mt-20">
       <div className="flex justify-between gap-5">
         <h1 className="mr-auto">Task</h1>
         <Tabs defaultValue={filter}>
-          <TabsList  className="grid grid-cols-4 w-full">
-            <TabsTrigger onClick={()=> dispatch(updateFilter("all"))} value="all">All</TabsTrigger>
-            <TabsTrigger onClick={()=> dispatch(updateFilter("low"))} value="low">Low</TabsTrigger>
-            <TabsTrigger onClick={()=> dispatch(updateFilter("medium"))} value="medium">Medium</TabsTrigger>
-            <TabsTrigger onClick={()=> dispatch(updateFilter("high"))} value="high">High</TabsTrigger>
+          <TabsList className="grid grid-cols-4 w-full">
+            <TabsTrigger onClick={() => dispatch( updateFilter( "all" ) )} value="all">All</TabsTrigger>
+            <TabsTrigger onClick={() => dispatch( updateFilter( "low" ) )} value="low">Low</TabsTrigger>
+            <TabsTrigger onClick={() => dispatch( updateFilter( "medium" ) )} value="medium">Medium</TabsTrigger>
+            <TabsTrigger onClick={() => dispatch( updateFilter( "high" ) )} value="high">High</TabsTrigger>
           </TabsList>
         </Tabs>
-        <AddTaskModal />
+        <AddTaskModal mode="add"/>
       </div>
 
       <div className="space-y-5 mt-5">
@@ -33,6 +33,13 @@ export default function Task ()
           ) )
         }
       </div>
+      {
+        tasks?.length === 0 && (
+          <div className="text-rose-600">
+            No tasks found!
+          </div>
+          )
+      }
     </div>
   );
 }
