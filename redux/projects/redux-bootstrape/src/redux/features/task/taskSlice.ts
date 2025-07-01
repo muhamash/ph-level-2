@@ -74,6 +74,10 @@ const taskSlice = createSlice( {
         {
             updateTask(state.tasks, action.payload)
         }
+    },
+    extraReducers: () =>
+    {
+        
     }
 } );
 

@@ -7,7 +7,7 @@ export const store = configureStore( {
     reducer: {
         // counter: 0
         todo: taskReducer,
-        user: userSlice
+        users: userSlice
     }
 } );
 
