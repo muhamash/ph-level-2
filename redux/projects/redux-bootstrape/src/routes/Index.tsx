@@ -19,7 +19,6 @@ const router = createBrowserRouter( [
                 Component: Task
             }
         ]
-
     },
     // {
     //     path: '/user',
