@@ -34,6 +34,7 @@ import
 import { Textarea } from "@/components/ui/textarea";
 import { useAppDispatch } from "@/hooks/useRedux";
 import { cn } from "@/lib/utils";
+import { useCreateMutation } from "@/redux/api/baseApi";
 import { addTask, updateSIngleTask, type ITask } from "@/redux/features/task/taskSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -49,7 +50,8 @@ interface TaskModalProps {
   
 export function AddTaskModal ({ mode, task }: TaskModalProps)
 {
-    const [open, setOpen] = useState(false)
+    const [ open, setOpen ] = useState( false )
+    const [createTask, {data, isLoading, isError}] = useCreateMutation()
 
     const formSchema = z.object( {
         title: z.string().min( 1, "Title is required" ),
@@ -100,7 +102,9 @@ export function AddTaskModal ({ mode, task }: TaskModalProps)
         }
 
         form.reset();
-        setOpen(false)
+        setOpen( false )
+        
+        const res = await createTask(payload).unwrap()
 
     };
   

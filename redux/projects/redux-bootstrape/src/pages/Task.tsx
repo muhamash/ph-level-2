@@ -10,6 +10,8 @@ export default function Task ()
   const dispatch = useAppDispatch();
   const filter = useAppSelector((state) => state.todo.filter); 
   console.log( tasks, filter )
+  // const { data, isLoading, isError } = useGetTasksQuery( undefined, { pollingInterval: 1000, refetchOnFocus: true, refetchOnMountOrArgChange: true, refetchOnReconnect: true } );
+
   
   return (
     <div className="mx-auto max-w-7xl px-5 mt-20">
